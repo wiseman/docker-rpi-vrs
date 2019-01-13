@@ -2,8 +2,9 @@ FROM arm32v7/mono
 
 WORKDIR /app/vrs
 
-COPY vrsbuild /app/vrs
+COPY build/vrs /app/vrs
 COPY vrs-runner.sh /app/vrs
+RUN mkdir -p /var/vrs
 
 EXPOSE 8080
 
