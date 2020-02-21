@@ -1,35 +1,21 @@
-#!/bin/bash
-set -e
+#!/bin/sh
 
-download_if_newer() {
-    echo "getting $1"
-    if [ -e "$1" ]
-    then
-	curl -o "$1" -z "$1" "$2"
-    else
-	curl -o "$1" "$2"
-    fi
-}
+ARCH=`uname -m`
+IMAGE=lemondronor/vrs
 
-FILES="VirtualRadar VirtualRadar.LanguagePack VirtualRadar.WebAdminPlugin VirtualRadar.WebAdminPlugin VirtualRadar.DatabaseWriterPlugin VirtualRadar.CustomContentPlugin VirtualRadar.DatabaseEditorPlugin"
-EXT=tar.gz
-BASE_URL="http://www.virtualradarserver.co.uk/Files"
-BUILD_DIR=build
+# Build
+echo Building ${IMAGE}:builder-${ARCH}
+docker build -t ${IMAGE}:builder-${ARCH} .
 
-mkdir -p $BUILD_DIR/vrs
+# Get version from just-built container
+# Starting container to pull version from container logs
+VERSION=`timeout 5 docker run --rm --name get_vrs_version --entrypoint cat ${IMAGE}:builder-${ARCH} /VERSION`
+# Tag the freshly built image
+echo VirtualRadarServer version ${VERSION} found
+echo Tagging ${IMAGE}:builder-${ARCH} as ${IMAGE}:${VERSION}-${ARCH}
+docker tag ${IMAGE}:builder-${ARCH} ${IMAGE}:${VERSION}-${ARCH}
+# Kill the temporary container if its still running (timeout will kill it automatically after 5 seconds in case this script dies)
+docker kill get_vrs_version > /dev/null 2>&1
+# Clean up the builder container
+docker image rm ${IMAGE}:builder-${ARCH} > /dev/null 2>&1
 
-for file in $FILES
-do
-    download_if_newer "$BUILD_DIR/$file.$EXT" "$BASE_URL/$file.$EXT"
-    (cd $BUILD_DIR/vrs && tar xzvf "../$file.$EXT")
-done
-
-download_if_newer $BUILD_DIR/VirtualRadar.exe.config.tar.gz "$BASE_URL/VirtualRadar.exe.config.tar.gz"
-(cd $BUILD_DIR/vrs && tar xvf ../VirtualRadar.exe.config.tar.gz)
-
-mkdir -p $BUILD_DIR/logos
-(cd $BUILD_DIR/logos && tar xzvf ../../logos.tar.gz)
-mkdir -p $BUILD_DIR/silhouettes
-(cd $BUILD_DIR/silhouettes && tar xzvf ../../silhouettes.tar.gz)
-
-docker build -t lemondronor/rpi-vrs .
