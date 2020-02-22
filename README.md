@@ -33,9 +33,9 @@ docker run -d \
     lemondronor/rpi-vrs
 ```
 
-Browse to `http://dockerhost:8078/VirtualRadar/` to access the VRS GUI.
+Browse to `http://dockerhost:8080/VirtualRadar/` to access the VRS GUI.
 
-Browse to `http://dockerhost:8078/VirtualRadar/WebAdmin/Index.html` to access the Admin area.
+Browse to `http://dockerhost:8080/VirtualRadar/WebAdmin/Index.html` to access the Admin area.
 
 ## Usage
 
