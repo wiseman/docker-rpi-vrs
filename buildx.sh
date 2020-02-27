@@ -6,7 +6,7 @@ IMAGE=mikenye/virtualradarserver
 docker buildx build -t ${IMAGE}:latest --compress --push --platform linux/amd64,linux/arm/v7,linux/arm64 .
 
 # Starting container to pull version from container logs
-VERSION=`timeout 5 docker run --rm --name get_vrs_version --entrypoint cat ${IMAGE}:latest /VERSION`
+VERSION=`timeout 5 docker run --rm -i --name get_vrs_version --entrypoint cat ${IMAGE}:latest /VERSION`
 # Tag the freshly built image
 echo ""
 echo VirtualRadarServer version ${VERSION} found

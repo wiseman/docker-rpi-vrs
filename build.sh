@@ -9,7 +9,7 @@ docker build -t ${IMAGE}:builder-${ARCH} .
 
 # Get version from just-built container
 # Starting container to pull version from container logs
-VERSION=`timeout 5 docker run --rm --name get_vrs_version --entrypoint cat ${IMAGE}:builder-${ARCH} /VERSION`
+VERSION=`timeout 5 docker run -i --rm --name get_vrs_version --entrypoint cat ${IMAGE}:builder-${ARCH} /VERSION`
 # Tag the freshly built image
 echo VirtualRadarServer version ${VERSION} found
 echo Tagging ${IMAGE}:builder-${ARCH} as ${IMAGE}:${VERSION}-${ARCH}
