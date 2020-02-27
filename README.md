@@ -6,7 +6,7 @@ Builds and runs on x86_64, arm32v7 and arm64v8 (and possibly other architectures
 
 ---
 
-![VRS logo](https://raw.githubusercontent.com/mikenye/docker-rpi-vrs/multiarch/vrs-logo.png) [Virtual Radar Server](http://www.virtualradarserver.co.uk)
+![VRS logo](https://raw.githubusercontent.com/mikenye/docker-virtualradarserver/multiarch/vrs-logo.png) [Virtual Radar Server](http://www.virtualradarserver.co.uk)
 
 Virtual Radar Server (VRS) plots aircraft positions on a map.
 
