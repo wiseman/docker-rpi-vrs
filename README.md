@@ -14,6 +14,8 @@ VRS is an open-source .NET application that runs a local web server.
 
 You can connect to the web server with any modern browser and see the aircraft plotted on a map.
 
+This container is designed to work in conjunction with a Mode-S / BEAST provider. Check out [mikenye/readsb](https://hub.docker.com/repository/docker/mikenye/readsb) or [mikenye/piaware](https://hub.docker.com/repository/docker/mikenye/piaware) for this, or BYO.
+
 ---
 
 ## Quick Start

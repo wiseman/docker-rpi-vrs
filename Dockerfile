@@ -14,9 +14,6 @@ ADD http://www.virtualradarserver.co.uk/Files/VirtualRadar.exe.config.tar.gz /tm
 #   - Instructions from: https://forum.virtualradarserver.co.uk/viewtopic.php?t=929
 ADD http://www.woodair.net/SBS/Download/LOGO.zip /tmp/files/operator-logo-starter-pack.zip
 
-# Script to get appropriate s6 overlay based on architecture
-ADD scripts/get-s6.sh /opt/helpers/get-s6.sh
-
 # Build container
 RUN \
   apt-get update -y && \
@@ -77,7 +74,6 @@ ENV VERSION_S6OVERLAY=v1.22.1.0 \
     HOME=/config
 COPY --from=builder /opt /opt
 COPY --from=builder /config /config
-COPY etc /etc
 RUN \
   apt-get update -y && \
   apt-get install -y --no-install-recommends \
@@ -90,10 +86,10 @@ RUN \
   grep version /config/.local/share/VirtualRadar/VirtualRadarLog.txt | grep -oP 'Program started, version (\d+.(\d+.)+),' | cut -d ',' -f 2 | cut -d ' ' -f 3 | head -1 > /VERSION && \
   cat /VERSION && \
   echo "Install s6-overlay..." &&  \
-  /opt/helpers/get-s6.sh && \
-  tar -xzf /tmp/s6-overlay.tar.gz -C / && \
+  curl -s https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/deploy-s6-overlay.sh | sh && \
   echo "Clean up..." &&  \
   rm -rf /opt/helpers /tmp/* /var/cache/apk/*
+COPY etc /etc
 EXPOSE 8080
 ENTRYPOINT [ "/init" ]
 
