@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ARCH=`uname -m`
-IMAGE=lemondronor/vrs
+IMAGE=mikenye/virtualradarserver
 
 # Build
 echo Building ${IMAGE}:builder-${ARCH}
