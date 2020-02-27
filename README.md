@@ -30,7 +30,7 @@ docker run -d \
     -e PASSWORD=very_secure_password_123 \
     -e BASESTATIONHOST=readsb \
     -v vrsconfig:/config \
-    lemondronor/rpi-vrs
+    mikenye/virtualradarserver 
 ```
 
 Browse to `http://dockerhost:8080/VirtualRadar/` to access the VRS GUI.
@@ -45,7 +45,7 @@ docker run [-d] \
     [-e <VARIABLE_NAME>=<VALUE>]... \
     [-v <HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]]... \
     [-p <HOST_PORT>:<CONTAINER_PORT>]... \
-    lemondronor/rpi-vrs
+    mikenye/virtualradarserver
 ```
 | Parameter | Description |
 |-----------|-------------|
@@ -102,7 +102,7 @@ volumes:
   vrsconfig:
 services:
   vrs:
-    image: lemondronor/rpi-vrs
+    image: mikenye/virtualradarserver
     tty: true
     container_name: vrs
     restart: always
