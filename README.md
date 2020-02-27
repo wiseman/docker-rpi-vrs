@@ -118,5 +118,5 @@ services:
 
 ## Support or Contact
 
-Having troubles with the container or have questions?  Please [create a new issue](https://github.com/wiseman/docker-rpi-vrs/issues).
+Having troubles with the container or have questions?  Please [create a new issue](https://github.com/mikenye/docker-virtualradarserver/issues).
 
