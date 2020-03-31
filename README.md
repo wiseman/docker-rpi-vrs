@@ -1,4 +1,4 @@
-# Docker container for Virtual Radar Server
+# mikenye/virtualradarserver
 
 Docker container for Virtual Radar Server (http://www.virtualradarserver.co.uk).
 
