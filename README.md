@@ -23,6 +23,7 @@ This container is designed to work in conjunction with a Mode-S / BEAST provider
 **NOTE**: The Docker command provided in this quick start is given as an example and parameters should be adjusted to suit your needs.
 
 Launch the VRS docker container with the following commands:
+
 ```
 docker volume create vrsconfig
 docker run -d \
@@ -74,11 +75,54 @@ of this parameter has the format `<VARIABLE_NAME>=<VALUE>`.
 
 The following table describes data volumes used by the container.  The mappings
 are set via the `-v` parameter.  Each mapping is specified with the following
-format: `<HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]`.
+format: `<NAMED_VOL>:<CONTAINER_DIR>[:PERMISSIONS]`.
 
 | Container path  | Permissions | Description |
 |-----------------|-------------|-------------|
-|`/config`| rw | This is where the application stores its configuration, log, operator flags and silhouette images, and any other files needing persistency. |
+|`/config`| rw | This is where the application stores its configuration, log, operator flags and silhouette images, and any other files needing persistency. If mounted, this must be a named volume.|
+
+As mentioned above, `/config` needs to be a named volume. A bind mount won't work properly.
+
+The docker run command initializes the newly created volume with any data that exists at the specified location within the base image. However, this only works for named volumes, not bind mounts (see [moby/moby#17470](https://github.com/moby/moby/issues/17470)).
+
+If you want to map the container's `/config` to a specific path on your system, you can:
+
+1.  Use the `docker volume create` command with arguments, eg:
+
+```shell
+docker volume create vrsconfig --opt o="bind" --opt device="/path/to/vrs/config" --opt type="none"
+```
+
+2.  If using `docker-compose`, use the following syntax in your `docker-compose.yml`, eg:
+
+```yaml
+version: '2.0'
+
+volumes:
+  vrsconfig:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/path/to/vrs/config'
+
+services:
+  virtualradarserver:
+    image: vrstest:latest
+    tty: true
+    container_name: vrs
+    restart: always
+    volumes:
+      - vrsconfig:/config
+    ports:
+      - 8077:8080
+    environment:
+      - USERNAME=vrsadmin
+      - PASSWORD=vrsadmin
+      - BASESTATIONHOST=readsb
+```
+
+Change `/path/to/vrs/config` to a directory on your system. Please be mindful that the contents of this directory (if it exists) will be overwritten with the contents of `/config` from the docker image.
 
 ### Ports
 
