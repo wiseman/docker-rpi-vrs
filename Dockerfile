@@ -139,4 +139,6 @@ COPY etc /etc
 
 EXPOSE 8080
 
+VOLUME [ "/config" ]
+
 ENTRYPOINT [ "/init" ]
